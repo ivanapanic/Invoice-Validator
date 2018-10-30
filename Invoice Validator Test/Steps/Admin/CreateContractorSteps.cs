@@ -5,6 +5,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -17,8 +18,23 @@ namespace Invoice_Validator_Test.Steps.Admin
     class CreateContractorSteps : BaseSteps
     
     {
+        private CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
+        private ContractorListPage contractorListPage = new ContractorListPage(Driver);
+        private HomePage homePage = new HomePage(Driver);
+
+
+        public void CreateContractorPageTests()
+        {
+            LoginPage loginPage = new LoginPage(Driver);
+            HomePage homePage = new HomePage(Driver);
+
+            loginPage.LoginAsAdmin();
+            homePage.SetRandomLocalLanguage();
+            homePage.NavigateToCreateContractorPage();
+        }
+
         //VARIABLES
-        string existingUsername = "IQService.contractor1";
+        string existingUsername = ConfigurationManager.AppSettings["usernameContractor"];
         string existingPccId = "81971";
 
 
@@ -32,109 +48,67 @@ namespace Invoice_Validator_Test.Steps.Admin
         [Given(@"Admin is logged in")]
         public void GivenAdminNavigatesToInvoiceValidatorWebSite()
         {
-            Driver.Navigate().GoToUrl("http://intnstest:50080/Account/Login/?ReturnUrl=%2F");
-
-            LoginPage loginPage = new LoginPage(Driver);
-            loginPage.UsernameInputField().SendKeys("IQService.admin1");
-            loginPage.PasswordInputField().SendKeys("87108884-1cac-4b8d-a80e-692425c5f294");
-
-            loginPage.SignInButton().Click();
-
+            CreateContractorPageTests();
         }
 
 
         //TEST CREATE CONTRACTOR WITH VALID DATA
-        [Given(@"Admin clicks on Create in Contractor dropdown")]
-        public void AdminClicksOnCreateInContractorDropdown()
-        {
-            AdminHomePage adminHomePage = new AdminHomePage(Driver);
-            adminHomePage.ContractorDropdown().Click();
-            adminHomePage.ContractorDropdownCreate().Click();
-        }
-
-        [Then(@"Create Contractor page is displayed")]
+        [Given(@"Create Contractor page is displayed")]
         public void CreateContractorPageIsDisplayed()
         {
-            CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
             Assert.That(createContractorPage.IsCreateContractorPageDisplayed, Is.True, "Create Contractor page is not displayed.");
         }
 
         [When(@"admin enters valid data for new contractor")]
         public void AdminEntersValidDataForNewContractor()
         {
-            CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
-            createContractorPage.UsernameContractorInputField().SendKeys(username);
-            createContractorPage.PCCIdInputField().SendKeys(pccId);
-            createContractorPage.FirstNameInputField().SendKeys(firstName);
-            createContractorPage.LastNameInputField().SendKeys(lastName);
+            createContractorPage.FillCreateContractorFields(username, pccId, firstName, lastName);
         }
 
         [When(@"clicks on create button")]
         public void ClicksOnCreateButton()
         {
-            CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
-;           createContractorPage.CreateButton().Click();
+            createContractorPage.ClickCreate();
         }
 
         [Then(@"page is redirected to list page")]
         public void PageIsRedirectedToListPage()
         {
-            ContractorListPage contractorListPage = new ContractorListPage(Driver);
             Assert.That(contractorListPage.IsConractorsListPageDisplayed, Is.True, "Contractors List page is not displayed.");
         }
 
         [Then(@"new contractor is displayed in list")]
         public void NewContractorIsDisplayedInList()
         {
-            ContractorListPage contractorListPage = new ContractorListPage(Driver);
             Assert.AreEqual(username, contractorListPage.Table().FindElement(By.XPath("//td[2][contains(string(), '" + username + "')]")).Text);
         }
 
 
 
         //TEST CREATE CONTRACTOR WITH INVALID DATA
-        [Given(@"Admin clicks on Create button in Contractor dropdown")]
-        public void AdminClicksOnCreateButtonInContractorDropdown()
-        {
-            AdminHomePage adminHomePage = new AdminHomePage(Driver);
-            adminHomePage.ContractorDropdown().Click();
-            adminHomePage.ContractorDropdownCreate().Click();
-        }
-
-        [Then(@"Page Create Contractor is displayed")]
+        [Given(@"Page Create Contractor is displayed")]
         public void PageCreateContractorIsDisplayed()
         {
-            CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
             Assert.That(createContractorPage.IsCreateContractorPageDisplayed, Is.True, "Create Contractor page is not displayed.");
         }
 
         [When(@"admin enters invalid data for new contractor")]
         public void AdminEntersInvalidDataForNewContractor()
         {
-            ContractorListPage contractorListPage = new ContractorListPage(Driver);
-            CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
-            createContractorPage.UsernameContractorInputField().SendKeys(existingUsername);
-            createContractorPage.PCCIdInputField().SendKeys(existingPccId);
-            createContractorPage.FirstNameInputField().SendKeys(firstName);
-            createContractorPage.LastNameInputField().SendKeys(lastName);
-
+            createContractorPage.FillCreateContractorFields(existingUsername, existingPccId, firstName, lastName);
         }
 
         [When(@"clicks on button create")]
         public void ClicksOnButtonCreate()
         {
-            CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
-            createContractorPage.CreateButton().Click();
+            createContractorPage.ClickCreate();
         }
 
         [Then(@"Error messages are displayed")]
         public void ErrorMessagesAreDisplayed()
         {
-            CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
-            AdminHomePage adminHomePage = new AdminHomePage(Driver);
-
             //loop for error messages depending on local language
-            if (adminHomePage.LanguageDropDown().Text.Contains("EN"))
+            if (homePage.LanguageDropDown().Text.Contains("EN"))
             {
                 Assert.AreEqual("Username already exsits.", createContractorPage.UsernameErrorMessage().Text);
                 Assert.AreEqual("PCC id already exsits.", createContractorPage.PCCIdErrorMessage().Text);
@@ -148,46 +122,29 @@ namespace Invoice_Validator_Test.Steps.Admin
 
 
         //TEST CREATE CONTRACTOR WITH EMPTY FIELDS
-        [Given(@"Admin clicks on button Create in Contractor dropdown")]
-        public void GivenAdminClicksOnButtonCreateInContractorDropdown()
-        {
-            AdminHomePage adminHomePage = new AdminHomePage(Driver);
-            adminHomePage.ContractorDropdown().Click();
-            adminHomePage.ContractorDropdownCreate().Click();
-        }
-
-        [Then(@"Create Contractor is displayed")]
+        [Given(@"Create Contractor is displayed")]
         public void ThenCreateContractorIsDisplayed()
         {
-            CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
             Assert.That(createContractorPage.IsCreateContractorPageDisplayed, Is.True, "Create Contractor page is not displayed.");
         }
 
         [When(@"leave fields empty")]
         public void WhenLeaveFieldsEmpty()
         {
-            CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
-            createContractorPage.UsernameContractorInputField().Clear();
-            createContractorPage.PCCIdInputField().Clear();
-            createContractorPage.FirstNameInputField().Clear();
-            createContractorPage.LastNameInputField().Clear();
+            createContractorPage.ClearCreateContractorFields();
         }
 
         [When(@"admin clicks on create button on create contractor page")]
         public void WhenAdminClicksOnCreateButtonOnCreateContractorPage()
         {
-            CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
-            createContractorPage.CreateButton().Click();
+            createContractorPage.ClickCreate();
         }
 
         [Then(@"Error messages are displayed on the page")]
         public void ThenErrorMessagesAreDisplayedOnThePage()
         {
-            CreateContractorPage createContractorPage = new CreateContractorPage(Driver);
-            AdminHomePage adminHomePage = new AdminHomePage(Driver);
-
             //loop for error messages depending on local language
-            if (adminHomePage.LanguageDropDown().Text.Contains("EN"))
+            if (homePage.LanguageDropDown().Text.Contains("EN"))
             {
                 Assert.AreEqual("Input for username is required.", createContractorPage.UsernameEmptyErrorMessage().Text);
                 Assert.AreEqual("Input for pcc id is required.", createContractorPage.PCCIdEmptyErrorMessage().Text);

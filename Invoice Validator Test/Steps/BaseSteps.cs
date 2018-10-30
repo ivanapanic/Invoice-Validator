@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
+using System.Configuration;
 
 namespace Invoice_Validator_Test.Steps
 {
@@ -22,6 +23,7 @@ namespace Invoice_Validator_Test.Steps
         {
             Driver = new ChromeDriver();
             Driver.Manage().Window.Maximize();
+            Driver.Url = ConfigurationManager.AppSettings["url"];
         }
 
 

@@ -12,10 +12,8 @@ And Contractor Home page is displayed
 	 And contractor clicks on sign out button
 	 Then page is redirected to login page
 	 When user logs in as admin
-	 Then Admin home is displayed
-	 When admin clicks on List button in Contractors claims dropdown in Header menu
-	 Then page is redirected to Contractor claims page 
-	 When admin enters data for filtering claim
+	 And redirect page to Contractor claims page 
+	 And admin enters data for filtering claim
 	 Then contractors's created claim is displayed in list
 	 When admin enters data for searching claim
 	 Then created claim is displayed in list

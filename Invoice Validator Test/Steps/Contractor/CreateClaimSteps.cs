@@ -9,12 +9,26 @@ using System.Data;
 using System.Collections;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
+using Invoice_Validator_Test.Pages.Admin;
 
 namespace Invoice_Validator_Test.Steps.Contractor
 {
     [Binding]
     public class CreateClaimSteps : BaseSteps
     {
+        private CreateClaimPage createClaimPage = new CreateClaimPage(Driver);
+        private HomePage homePage = new HomePage(Driver);
+        private ClaimsListPage claimsListPage = new ClaimsListPage(Driver);
+
+        public void CreateClaimPageTests()
+        {
+            LoginPage loginPage = new LoginPage(Driver);
+            CreateClaimPage contractorHomePage = new CreateClaimPage(Driver);
+            HomePage homePage = new HomePage(Driver);
+
+            loginPage.LoginAsContractor();
+            homePage.SetRandomLocalLanguage();
+        }
 
         //VARIABLES
         //valid data
@@ -26,7 +40,7 @@ namespace Invoice_Validator_Test.Steps.Contractor
         static string bicycle = GenerateRandomData.GenerateRandomNumber(4);
 
         //get total
-        static int totalOfClaims = GenerateRandomData.SumNumbers(Convert.ToInt32(monthlyClaim), Convert.ToInt32(uniqa)*(-1), Convert.ToInt32(bicycle));
+        static int totalOfClaims = GenerateRandomData.SumNumbers(Convert.ToInt32(monthlyClaim), Convert.ToInt32(uniqa) * (-1), Convert.ToInt32(bicycle));
         string total = Convert.ToString(totalOfClaims);
 
         //invalid data
@@ -42,15 +56,9 @@ namespace Invoice_Validator_Test.Steps.Contractor
         [Given(@"Log in as contractor")]
         public void GivenLogInAsContractor()
         {
-            Driver.Navigate().GoToUrl("http://intnstest:50080/Account/Login/?ReturnUrl=%2F");
-
-            LoginPage loginPage = new LoginPage(Driver);
-            loginPage.UsernameInputField().SendKeys("IQService.contractor1");
-            loginPage.PasswordInputField().SendKeys("87108884-1cac-4b8d-a80e-692425c5f294");
-
-            loginPage.SignInButton().Click();
+            CreateClaimPageTests();
         }
-        
+
 
 
 
@@ -58,28 +66,21 @@ namespace Invoice_Validator_Test.Steps.Contractor
         [Given(@"Invoice Validator is displayed")]
         public void GivenInvoiceValidatorIsDisplayed()
         {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            Assert.That(contractorHomePage.IsContractorHomePageDisplayed(), Is.True, "Contractor Home page is not displayed.");
+            Assert.That(homePage.IsHomePageDisplayed(), Is.True, "Contractor Home page is not displayed.");
         }
 
         [When(@"contractor enters valid data in create claim form")]
         public void WhenContractorEntersValidDataInCreateClaimForm()
         {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            GenerateRandomData.SelectRandomElement(contractorHomePage.AccPeriodCreateClaimDropdown());
-
+            createClaimPage.SelectAccountingPeriod();
             //clear input fields
-            contractorHomePage.AccNumberToPayInputField().Clear();
-            contractorHomePage.MonthlyClaimInputField().Clear();
+            createClaimPage.ClearCreateClaimFields();
 
             //enter data in input fields
-            contractorHomePage.AccNumberToPayInputField().SendKeys(accNumToPay);
-            contractorHomePage.MonthlyClaimInputField().SendKeys(monthlyClaim);
-            contractorHomePage.UniqaInputField().SendKeys(uniqa);
-            contractorHomePage.BicycleInputField().SendKeys(bicycle);
+            createClaimPage.FillAllCreateClaimFields(accNumToPay, monthlyClaim, uniqa, bicycle);
 
             //check total amount
-            contractorHomePage.TotalInputField().Text.Equals(total);
+            createClaimPage.TotalInputField().Text.Equals(total);
 
 
 
@@ -88,14 +89,12 @@ namespace Invoice_Validator_Test.Steps.Contractor
         [When(@"clicks Create button")]
         public void WhenClicksCreateButton()
         {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            contractorHomePage.CreateClaimButton().Click();
+            createClaimPage.ClickCreate();
         }
 
         [When(@"page is redirected to Claims list page")]
         public void WhenPageIsRedirectedToClaimsListPage()
         {
-            ClaimsListPage claimsListPage = new ClaimsListPage(Driver);
             Assert.That(claimsListPage.IsClaimsListPageDisplayed(), Is.True, "Claims list page is not displayed.");
         }
 
@@ -103,7 +102,6 @@ namespace Invoice_Validator_Test.Steps.Contractor
         public void ThenCreatedClaimIsDisplayedInTheList()
         {
             //created claim should be present in the first row
-            ClaimsListPage claimsListPage = new ClaimsListPage(Driver);
             Assert.AreEqual(accNumToPay, claimsListPage.Table().FindElement(By.XPath("//tbody//tr[1]//td[4]")).Text);
         }
 
@@ -115,57 +113,46 @@ namespace Invoice_Validator_Test.Steps.Contractor
         [Given(@"Page Invoice is displayed")]
         public void GivenPageInvoiceIsDisplayed()
         {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            Assert.That(contractorHomePage.IsContractorHomePageDisplayed(), Is.True, "Contractor Home page is not displayed.");
+            Assert.That(homePage.IsHomePageDisplayed(), Is.True, "Contractor Home page is not displayed.");
         }
 
         [When(@"contractor enters invalid data in create claim form")]
         public void WhenContractorEntersInvalidDataInCreateClaimForm()
         {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            GenerateRandomData.SelectRandomElement(contractorHomePage.AccPeriodCreateClaimDropdown());
-
             //clear input fields
-            contractorHomePage.AccNumberToPayInputField().Clear();
-            contractorHomePage.MonthlyClaimInputField().Clear();
+            createClaimPage.ClearCreateClaimFields();
 
             //enter data in input fields
-            contractorHomePage.AccNumberToPayInputField().SendKeys(invalidAccNumToPay);
-            contractorHomePage.MonthlyClaimInputField().SendKeys(invalidMonthlyClaim);
-            contractorHomePage.UniqaInputField().SendKeys(invalidUniqa);
-            contractorHomePage.BicycleInputField().SendKeys(invalidBicycle);
+            createClaimPage.FillAllCreateClaimFields(invalidAccNumToPay, invalidMonthlyClaim, invalidUniqa, invalidBicycle);
         }
-        
+
         [When(@"clicks button Create")]
         public void WhenClicksButtonCreate()
         {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            contractorHomePage.CreateClaimButton().Click();
+            createClaimPage.CreateClaimButton().Click();
         }
 
 
         [Then(@"Messages about errors are displayed")]
         public void ThenMessagesAboutErrorsAreDisplayed()
         {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-
             //loop for error messages depending on local language
-            if (contractorHomePage.LanguageDropDown().Text.Contains("EN"))
+            if (homePage.LanguageDropDown().Text.Contains("EN"))
             {
-                Assert.AreEqual("Invalid format. Please enter a valid format: xxx-xxxxxxxxxxxxx-xx.", contractorHomePage.AccNumToPayErrorMsg().Text);
-                Assert.AreEqual("Input for amount is not valid.", contractorHomePage.MonthlyClaimErrorMsg().Text);
-                Assert.AreEqual("Input for amount is not valid.", contractorHomePage.UniqaErrorMsg().Text);
-                Assert.AreEqual("Input for amount is not valid.", contractorHomePage.BicycleErrorMsg().Text);
+                Assert.AreEqual("Invalid format. Please enter a valid format: xxx-xxxxxxxxxxxxx-xx.", createClaimPage.AccNumToPayErrorMsg().Text);
+                Assert.AreEqual("Input for amount is not valid.", createClaimPage.MonthlyClaimErrorMsg().Text);
+                Assert.AreEqual("Input for amount is not valid.", createClaimPage.UniqaErrorMsg().Text);
+                Assert.AreEqual("Input for amount is not valid.", createClaimPage.BicycleErrorMsg().Text);
             }
             else
             {
-                Assert.AreEqual("Neispravan format. Unesite broj u formatu: xxx-xxxxxxxxxxxxx-xx.", contractorHomePage.AccNumToPayErrorMsg().Text);
-                Assert.AreEqual("Uneti iznos nije ispravan.", contractorHomePage.MonthlyClaimErrorMsg().Text);
-                Assert.AreEqual("Uneti iznos nije ispravan.", contractorHomePage.UniqaErrorMsg().Text);
-                Assert.AreEqual("Uneti iznos nije ispravan.", contractorHomePage.BicycleErrorMsg().Text);
+                Assert.AreEqual("Neispravan format. Unesite broj u formatu: xxx-xxxxxxxxxxxxx-xx.", createClaimPage.AccNumToPayErrorMsg().Text);
+                Assert.AreEqual("Uneti iznos nije ispravan.", createClaimPage.MonthlyClaimErrorMsg().Text);
+                Assert.AreEqual("Uneti iznos nije ispravan.", createClaimPage.UniqaErrorMsg().Text);
+                Assert.AreEqual("Uneti iznos nije ispravan.", createClaimPage.BicycleErrorMsg().Text);
             }
-        }
-        
 
+
+        }
     }
 }

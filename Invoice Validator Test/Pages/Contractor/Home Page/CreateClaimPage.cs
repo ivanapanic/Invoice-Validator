@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
@@ -8,47 +9,27 @@ using System.Threading.Tasks;
 
 namespace Invoice_Validator_Test.Pages.Contractor
 {
-    class ContractorHomePage
+    class CreateClaimPage
     {
         private IWebDriver driver;
 
         //elements
-        public ContractorHomePage(IWebDriver driver)
+        public CreateClaimPage(IWebDriver driver)
         {
             this.driver = driver;
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
             wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//div[@class='navbar navbar-inverse navbar-fixed-top']")));
         }
 
-        public bool IsContractorHomePageDisplayed()
+        public bool IsCreateClaimPageDisplayed()
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.UrlContains("/Claims/Create"));
         }
 
-        public IWebElement InvoiceValidatorButton()
-        {
-            By invoiceButton = By.XPath("//a[@href='/']");
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
-            return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(invoiceButton));
-        }
+       
 
-        
-        public IWebElement LanguageDropDown()
-        {
-            By languageDropdown = By.XPath("//ul[@class='nav navbar-nav navbar-right']//li[@class='dropdown']");
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
-            return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists(languageDropdown));
-
-        }
-
-        public IWebElement ProfileButton()
-        {
-            By profileButton = By.XPath("//a[@href='/users/edit/443']");
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
-            return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(profileButton));
-        }
-
+       
 
         //create claim form on contractor home page
         public IWebElement AccPeriodCreateClaimDropdown()
@@ -139,6 +120,30 @@ namespace Invoice_Validator_Test.Pages.Contractor
         }
 
 
-        
+        //actions
+        public void ClearCreateClaimFields()
+        {
+            AccNumberToPayInputField().Clear();
+            MonthlyClaimInputField().Clear();
+        }
+
+        public void FillAllCreateClaimFields(string accNumToPay, string monthlyClaim, string uniqa, string bicycle)
+        {
+            AccNumberToPayInputField().SendKeys(accNumToPay);
+            MonthlyClaimInputField().SendKeys(monthlyClaim);
+            UniqaInputField().SendKeys(uniqa);
+            BicycleInputField().SendKeys(bicycle);
+        }
+
+        public void ClickCreate()
+        {
+            CreateClaimButton().Click();
+        }
+
+        public void SelectAccountingPeriod()
+        {
+            GenerateRandomData.SelectRandomElement(AccPeriodCreateClaimDropdown());
+
+        }
     }
 }

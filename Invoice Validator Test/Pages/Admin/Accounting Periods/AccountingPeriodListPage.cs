@@ -35,7 +35,7 @@ namespace Invoice_Validator_Test.Pages.Admin.Accounting_Periods
             By table = By.XPath("//table[@class='table']");
 
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
-            return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(table));
+            return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists(table));
         }
 
        

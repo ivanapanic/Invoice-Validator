@@ -89,16 +89,14 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line 10
-testRunner.Given("Admin clicks on Create in Accounting periods dropdown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+testRunner.Given("Create Accounting page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 11
- testRunner.Then("Create Accounting page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 12
  testRunner.When("admin enters valid data for new accounting period and leave checkbox checked", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 13
+#line 12
  testRunner.And("admin clicks on button create", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 14
+#line 13
  testRunner.Then("page is redirected to Accounting periods list page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 15
+#line 14
  testRunner.And("new accounting period is displayed in list as active", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -109,24 +107,22 @@ testRunner.Given("Admin clicks on Create in Accounting periods dropdown", ((stri
         public virtual void CreateAccountingPeriodWithInactiveCheckbox()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create Accounting period with inactive checkbox", null, ((string[])(null)));
-#line 17
+#line 16
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
+#line 17
+ testRunner.Given("Page Create Accounting period is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 18
- testRunner.Given("Admin clicks on Create in Accounting period dropdown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 19
- testRunner.Then("Page Create Accounting period is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 20
  testRunner.When("admin enters valid data in create accounting period form", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 21
+#line 19
  testRunner.And("admin uncheck Active checkbox", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 22
+#line 20
  testRunner.And("admin clicks on create", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 23
+#line 21
  testRunner.Then("page is redirected to List of Accounting periods page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 24
+#line 22
  testRunner.Then("new accounting period is displayed in list as inactive", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -137,20 +133,18 @@ this.FeatureBackground();
         public virtual void CreateAccountingPeriodWithInvalidYearAndDateFormat()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create Accounting period with invalid year and date format", null, ((string[])(null)));
-#line 26
+#line 24
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
-#line 27
- testRunner.Given("Admin clicks on Create button in Accounting period dropdown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 28
- testRunner.Then("Page Create Accounting period with Create form is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 29
+#line 25
+ testRunner.Given("Page Create Accounting period with Create form is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 26
  testRunner.When("admin enters invalid data in create accounting period form", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 30
+#line 27
  testRunner.And("admin clicks on create button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 31
+#line 28
     testRunner.Then("expected messages are displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -161,18 +155,16 @@ this.FeatureBackground();
         public virtual void CreateAccountingPeriodWithEmptyFields()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create Accounting period with empty fields", null, ((string[])(null)));
-#line 34
+#line 31
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
-#line 35
- testRunner.Given("Admin clicks on button Create in Accounting period dropdown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 36
- testRunner.Then("Page Create with Create Accounting period form is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 37
+#line 32
+ testRunner.Given("Page Create with Create Accounting period form is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 33
  testRunner.When("admin leaves fields empty", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 38
+#line 34
     testRunner.Then("expected error messages are displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

@@ -76,7 +76,7 @@ namespace Invoice_Validator_Test.Pages.Admin
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(saveButton));
         }
 
-        //functions
+        //actions
         public enum EditContractorFields
         {
             Username,
@@ -95,6 +95,30 @@ namespace Invoice_Validator_Test.Pages.Admin
                 {EditContractorFields.LastName, LastNameField().GetAttribute("value")}
             };
             return dict;
+        }
+
+        public void ClearAllEditContractorFields()
+        {
+            PCCIdField().Clear();
+            FirstNameField().Clear();
+            LastNameField().Clear();
+        }
+
+        public void FillAllEditContractorFields(string pccId, string firstName, string lastName)
+        {
+            PCCIdField().SendKeys(pccId);
+            FirstNameField().SendKeys(firstName);
+            LastNameField().SendKeys(lastName);
+        }
+
+        public void ClickSave()
+        {
+            SaveButton().Click();
+        }
+
+        public void CheckCheckbox()
+        {
+            ActiveCheckbox().Click();
         }
     }
 }

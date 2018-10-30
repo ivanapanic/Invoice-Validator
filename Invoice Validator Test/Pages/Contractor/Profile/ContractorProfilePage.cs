@@ -136,7 +136,7 @@ namespace Invoice_Validator_Test.Pages.Contractor
         }
 
 
-        //functions
+        //actions
         public enum ProfileFields
         {
             Address,
@@ -163,6 +163,33 @@ namespace Invoice_Validator_Test.Pages.Contractor
             return dict;
         }
 
-      
+        public void ClearAllProfileFields()
+        {
+            AddressField().Clear();
+            BankNameField().Clear();
+            AccountNumberField().Clear();
+            AgencyNameField().Clear();
+            RegistryNumberForCountry().Clear();
+            TaxIdentificationNumber().Clear();
+            TelephoneField().Clear();
+        }
+
+
+        public void FillAllProfileFields(string address, string bankName, string accountNumber, 
+            string agencyName, string registryNumber, string taxNumber, string telNumber)
+        {
+            AddressField().SendKeys(address);
+            BankNameField().SendKeys(bankName);
+            AccountNumberField().SendKeys(accountNumber);
+            AgencyNameField().SendKeys(agencyName);
+            RegistryNumberForCountry().SendKeys(registryNumber);
+            TaxIdentificationNumber().SendKeys(taxNumber);
+            TelephoneField().SendKeys(telNumber);
+        }
+
+        public void ClickSave()
+        {
+            SaveButton().Click();
+        }
     }
 }

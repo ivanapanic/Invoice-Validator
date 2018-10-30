@@ -8,9 +8,7 @@ Given Contractor is logged in
 
 
 Scenario: Edit profile with valid data
-Given Invoice Validator page is displayed
-When contractor clicks on Profile from header menu
-Then Profile page is displayed
+Given Profile page is displayed
      When contractor enters valid data
 	 And clicks Save button
 	 When page is redirected to Home page
@@ -19,9 +17,7 @@ Then Profile page is displayed
 
 
 Scenario: Edit profile with invalid data
-Given Page Invoice Validator is displayed
-When contractor clicks on Profile button in header menu
-Then Contractor Profile page is displayed
+Given Contractor Profile page is displayed
      When contractor enters invalid data
 	 And clicks button Save
 	 Then Error messages are displayed on page

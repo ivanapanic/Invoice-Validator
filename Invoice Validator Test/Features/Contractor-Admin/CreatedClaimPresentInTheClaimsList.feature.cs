@@ -93,18 +93,14 @@ testRunner.And("Contractor Home page is displayed", ((string)(null)), ((TechTalk
 #line 14
   testRunner.When("user logs in as admin", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 15
-  testRunner.Then("Admin home is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.And("redirect page to Contractor claims page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 16
-  testRunner.When("admin clicks on List button in Contractors claims dropdown in Header menu", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.And("admin enters data for filtering claim", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 17
-  testRunner.Then("page is redirected to Contractor claims page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 18
-  testRunner.When("admin enters data for filtering claim", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 19
   testRunner.Then("contractors\'s created claim is displayed in list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 20
+#line 18
   testRunner.When("admin enters data for searching claim", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 21
+#line 19
   testRunner.Then("created claim is displayed in list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

@@ -109,6 +109,26 @@ namespace Invoice_Validator_Test.Pages.Admin
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(errorMsg));
         }
 
-        
+        //actions
+        public void FillCreateContractorFields(string username, string pccId, string firstName, string lastName)
+        {
+            UsernameContractorInputField().SendKeys(username);
+            PCCIdInputField().SendKeys(pccId);
+            FirstNameInputField().SendKeys(firstName);
+            LastNameInputField().SendKeys(lastName);
+        }
+
+        public void ClickCreate()
+        {
+            CreateButton().Click();
+        }
+
+        public void ClearCreateContractorFields()
+        {
+            UsernameContractorInputField().Clear();
+            PCCIdInputField().Clear();
+            FirstNameInputField().Clear();
+            LastNameInputField().Clear();
+        }
     }
 }

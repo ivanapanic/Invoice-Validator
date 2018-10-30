@@ -27,6 +27,8 @@ namespace Invoice_Validator_Test.Pages.Admin
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.UrlContains("/AccountingPeriods/Create"));
         }
 
+        
+
 
         //elements
         public IWebElement MonthDropDown()
@@ -172,6 +174,13 @@ namespace Invoice_Validator_Test.Pages.Admin
 
 
         //error messages
+        public IWebElement ExistingAccPeriodErrorMessage()
+        {
+            By errorMsg = By.XPath("//span//span[contains(string(),'Specified accounting period already exists.')]");
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
+            return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists(errorMsg));
+        }
+
         public IWebElement YearErrorMessage()
         {
             By year = By.Id("Year-error");
@@ -208,7 +217,7 @@ namespace Invoice_Validator_Test.Pages.Admin
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(claimPayment));
         }
 
-        
+
 
         //functions
         public static int GenerateRandomYear()
@@ -312,6 +321,86 @@ namespace Invoice_Validator_Test.Pages.Admin
             string month = listOfNumbers[rnd.Next(listOfNumbers.Count)];
             return month;
 
+        }
+
+        //actions
+
+        
+
+        public void SelectMonth(string month)
+        {
+            SelectElement selectMonth = new SelectElement(MonthDropDown());
+            selectMonth.SelectByText(month);
+        }
+
+
+        /*first we select day(first in month), after that we switch to month and 
+         * select month and than switch to year and select year*/
+        public void SelectClaimIssueDate(IWebElement element)
+        {
+            ClaimIssueDateDropDown().Click();
+            ClaimIssueDayPicker().Click();
+            ClaimIssueMonthSwitcher().Click();
+            element.Click();
+            ClaimIssueMonthSwitcher().Click();
+            ClaimIssueYearSwitcher().Click();
+            ClaimIssueYearPicker().Click();
+        }
+
+        /*we select day(last in month), after that we switch to month and
+         * select month and than switch to year and select year*/
+        public void SelectClaimPaymentDate(IWebElement element)
+        {
+            ClaimPaymentDateDropDown().Click();
+            ClaimPaymentDayPicker().Click();
+            ClaimPaymentMonthSwitcher().Click();
+            element.Click();
+            ClaimPaymentMonthSwitcher().Click();
+            ClaimPaymentYearSwitcher().Click();
+            ClaimPaymentYearPicker().Click();
+        }
+
+
+
+        public void EnterYear(string year)
+        {
+            YearInputField().Clear();
+            YearInputField().SendKeys(year);
+        }
+
+        public void ClickCreate()
+        {
+            CreateButton().Click();
+        }
+
+
+        public void EnterInvalidDateFormat(string issueDate, string paymentDate)
+        {
+           ClaimIssueDateDropDown().SendKeys(issueDate);
+           YearInputField().Click();
+
+           ClaimPaymentDateDropDown().SendKeys(paymentDate);
+           YearInputField().Click();
+
+        }
+
+        public void ClearFields()
+        {
+            YearInputField().Clear();
+            ClaimIssueDateDropDown().Clear();
+            YearInputField().Click();
+            ClaimPaymentDateDropDown().Clear();
+            YearInputField().Click();
+        }
+
+        public void CheckActiveCheckbox()
+        {
+            ActiveCheckBox().Click();
+        }
+
+        public void ClickYearInputField()
+        {
+            YearInputField().Click();
         }
     }
 }

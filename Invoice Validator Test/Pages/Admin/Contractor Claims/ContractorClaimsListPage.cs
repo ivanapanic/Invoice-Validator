@@ -2,6 +2,7 @@
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -130,6 +131,28 @@ namespace Invoice_Validator_Test.Pages.Admin.Contractor_Claims
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(accNum));
         }
 
+        //actions
+        public void FillFieldsForFilter()
+        {
+            UsernameInputfield().SendKeys(ConfigurationManager.AppSettings["usernameContractor"]);
+            TotalFrom().SendKeys("0");
+            TotalTo().SendKeys(GenerateRandomData.GenerateRandomNumber(15));
+            FilterSubmitButton().Click();
+        }
+
+        public void FillFieldsForSearch(string accNumToPay, string textCriteria)
+        {
+            InputSearchCriteria().SendKeys(accNumToPay);
+            SelectElement selectCriteria = new SelectElement(SelectSearchCriteria());
+            selectCriteria.SelectByText(textCriteria);
+            GenerateRandomData.SelectRandomElement(OrderBy());
+            SearchSubmitButton().Click();
+        }
+
+        public void FilterSerachSwitch()
+        {
+            FilterSearchButton().Click();
+        }
 
     }
 }

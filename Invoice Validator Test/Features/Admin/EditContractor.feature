@@ -5,11 +5,7 @@
 
 Scenario:  Edit Contractor
 Given Log in with admin credentials
-And Admin Home page is displayed
-	When admin clicks on List page in Contractor dropdown
-	Then contractors list page is displayed
-	When admin clicks on Edit button in list of contractors
-	Then Edit contractor page is displayed
+And Edit contractor page is displayed
 	When admin enters  data
 	And active checkbox is checked
 	And clicks on save button

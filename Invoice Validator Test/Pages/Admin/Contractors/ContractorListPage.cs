@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Data;
+using NUnit.Framework;
 
 namespace Invoice_Validator_Test.Pages.Admin
 {
@@ -54,6 +55,14 @@ namespace Invoice_Validator_Test.Pages.Admin
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(editColumn));
         }
 
+        //actions
+        public void NavigateToEditContractorPage()
+        {
+            Assert.That(IsConractorsListPageDisplayed, Is.True, "Contractors List page is not displayed.");
 
+            //contractorListPage.Table().FindElement(By.XPath("//tr[contains(string(), '" + GenerateRandomData.GenerateRow(listPage.Table()) + "')]//td[7]//a[1]")).Click();
+            Table().FindElement(By.XPath("//tr[contains(string(), '" + "Username" + "')]//td[7]//a[1]")).Click();
+
+        }
     }
 }

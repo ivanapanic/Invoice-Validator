@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace Invoice_Validator_Test.Pages
 {
@@ -70,5 +71,20 @@ namespace Invoice_Validator_Test.Pages
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(errorMsg));
         }
 
+
+        //actions
+        public void LoginAsAdmin()
+        {
+            UsernameInputField().SendKeys(ConfigurationManager.AppSettings["usernameAdmin"]);
+            PasswordInputField().SendKeys(ConfigurationManager.AppSettings["password"]);
+            SignInButton().Click();
+        }
+
+        public void LoginAsContractor()
+        {
+            UsernameInputField().SendKeys(ConfigurationManager.AppSettings["usernameContractor"]);
+            PasswordInputField().SendKeys(ConfigurationManager.AppSettings["password"]);
+            SignInButton().Click();
+        }
     }
 }

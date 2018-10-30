@@ -1,4 +1,5 @@
 ﻿using Invoice_Validator_Test.Pages;
+using Invoice_Validator_Test.Pages.Admin;
 using Invoice_Validator_Test.Pages.Contractor;
 using Invoice_Validator_Test.Steps;
 using NUnit.Framework;
@@ -12,6 +13,20 @@ namespace Invoice_Validator_Test
     [Binding]
     public class ContractorEditProfileSteps : BaseSteps
     {
+        private ContractorProfilePage contractorProfilePage = new ContractorProfilePage(Driver);
+        private HomePage homePage = new HomePage(Driver);
+
+        public void EditContractorPageTests()
+        {
+            LoginPage loginPage = new LoginPage(Driver);
+            CreateClaimPage contractorHomePage = new CreateClaimPage(Driver);
+            HomePage homePage = new HomePage(Driver);
+
+            loginPage.LoginAsContractor();
+            homePage.SetRandomLocalLanguage();
+            homePage.NavigateToContractorProfilePage();
+
+        }
 
         //VARIABLES 
 
@@ -45,60 +60,25 @@ namespace Invoice_Validator_Test
         [Given(@"Contractor is logged in")]
         public void GivenContractorIsLoggedIn()
         {
-            Driver.Navigate().GoToUrl("http://intnstest:50080/Account/Login/?ReturnUrl=%2F");
-
-            LoginPage loginPage = new LoginPage(Driver);
-            loginPage.UsernameInputField().SendKeys("IQService.contractor1");
-            loginPage.PasswordInputField().SendKeys("87108884-1cac-4b8d-a80e-692425c5f294");
-
-            loginPage.SignInButton().Click();
-        }
-        
-
-        //TEST EDIT CONTRACTOR WITH VALID DATA 
-        [Given(@"Invoice Validator page is displayed")]
-        public void GivenInvoiceValidatorPageIsDisplayed()
-        {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            Assert.That(contractorHomePage.IsContractorHomePageDisplayed(), Is.True, "Contractor Home page is not displayed.");
+            EditContractorPageTests();
         }
 
-        [When(@"contractor clicks on Profile from header menu")]
-        public void WhenContractorClicksOnProfileFromHeaderMenu()
-        {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            contractorHomePage.ProfileButton().Click();
-        }
 
-        [Then(@"Profile page is displayed")]
+        //TEST EDIT CONTRACTOR'S PROFILE WITH VALID DATA 
+        [Given(@"Profile page is displayed")]
         public void ThenProfilePageIsDisplayed()
         {
-            ContractorProfilePage contractorProfilePage = new ContractorProfilePage(Driver);
             Assert.That(contractorProfilePage.IsContractorProfilePageDisplayed(), Is.True, "Contractor Profile page is not displayed.");
+
         }
 
         [When(@"contractor enters valid data")]
         public void WhenContractorEntersValidData()
         {
-            ContractorProfilePage contractorProfilePage = new ContractorProfilePage(Driver);
-            //clear input fields
-            contractorProfilePage.AddressField().Clear();
-            contractorProfilePage.BankNameField().Clear();
-            contractorProfilePage.AccountNumberField().Clear();
-            contractorProfilePage.AgencyNameField().Clear();
-            contractorProfilePage.RegistryNumberForCountry().Clear();
-            contractorProfilePage.TaxIdentificationNumber().Clear();
-            contractorProfilePage.TelephoneField().Clear();
+            contractorProfilePage.ClearAllProfileFields();
 
-
-            //enter data in input fields
-            contractorProfilePage.AddressField().SendKeys(address);
-            contractorProfilePage.BankNameField().SendKeys(bankName);
-            contractorProfilePage.AccountNumberField().SendKeys(accountNumber);
-            contractorProfilePage.AgencyNameField().SendKeys(agencyName);
-            contractorProfilePage.RegistryNumberForCountry().SendKeys(registryNumber);
-            contractorProfilePage.TaxIdentificationNumber().SendKeys(taxNumber);
-            contractorProfilePage.TelephoneField().SendKeys(telNumber);
+            contractorProfilePage.FillAllProfileFields(address, bankName, accountNumber, agencyName,
+                registryNumber, taxNumber, telNumber);
 
             dictReadDataDuringEdition = contractorProfilePage.StoreProfileDataToDictionary();
         }
@@ -106,106 +86,59 @@ namespace Invoice_Validator_Test
         [When(@"clicks Save button")]
         public void WhenClicksSaveButton()
         {
-            ContractorProfilePage contractorProfilePage = new ContractorProfilePage(Driver);
-            contractorProfilePage.SaveButton().Click();
+            contractorProfilePage.ClickSave();
         }
 
         [When(@"page is redirected to Home page")]
         public void WhenPageIsRedirectedToHomePage()
         {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            Assert.That(contractorHomePage.IsContractorHomePageDisplayed(), Is.True, "Contractor Home page is not displayed.");
+            Assert.That(homePage.IsHomePageDisplayed(), Is.True, "Contractor Home page is not displayed.");
         }
 
         [When(@"clicks on Profile from header menu")]
         public void WhenClicksOnProfileFromHeaderMenu()
         {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            contractorHomePage.ProfileButton().Click();
+            homePage.NavigateToContractorProfilePage();
         }
 
         [Then(@"changed data is displayed")]
         public void ThenChangedDataIsDisplayed()
-        {
-            ContractorProfilePage contractorProfilePage = new ContractorProfilePage(Driver);
-            //Assert.AreEqual(address, contractorProfilePage.AddressField().GetAttribute("value"));
-            //Assert.AreEqual(bankName, contractorProfilePage.BankNameField().GetAttribute("value"));
-            //Assert.AreEqual(accountNumber, contractorProfilePage.AccountNumberField().GetAttribute("value"));
-            //Assert.AreEqual(agencyName, contractorProfilePage.AgencyNameField().GetAttribute("value"));
-            //Assert.AreEqual(registryNumber, contractorProfilePage.RegistryNumberForCountry().GetAttribute("value"));
-            //Assert.AreEqual(taxNumber, contractorProfilePage.TaxIdentificationNumber().GetAttribute("value"));
-            //Assert.AreEqual(telNumber, contractorProfilePage.TelephoneField().GetAttribute("value"));
-
+        { 
             dictReadEditedData = contractorProfilePage.StoreProfileDataToDictionary();
-
             Assert.AreEqual(dictReadDataDuringEdition, dictReadEditedData);
 
         }
 
 
 
-        //TEST EDIT CONTRACTOR WITH INVALID DATA
-        [Given(@"Page Invoice Validator is displayed")]
-        public void GivenPageInvoiceValidatorIsDisplayed()
-        {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            Assert.That(contractorHomePage.IsContractorHomePageDisplayed(), Is.True, "Contractor Home page is not displayed.");
-        }
-
-        [When(@"contractor clicks on Profile button in header menu")]
-        public void WhenContractorClicksOnProfileButtonInHeaderMenu()
-        {
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-            contractorHomePage.ProfileButton().Click();
-        }
-
-        [Then(@"Contractor Profile page is displayed")]
+        //TEST EDIT CONTRACTOR'S PROFILE WITH INVALID DATA
+        [Given(@"Contractor Profile page is displayed")]
         public void ThenContractorProfilePageIsDisplayed()
         {
-            ContractorProfilePage contractorProfilePage = new ContractorProfilePage(Driver);
             Assert.That(contractorProfilePage.IsContractorProfilePageDisplayed(), Is.True, "Contractor Profile page is not displayed.");
         }
 
         [When(@"contractor enters invalid data")]
         public void WhenContractorEntersInvalidData()
         {
-            ContractorProfilePage contractorProfilePage = new ContractorProfilePage(Driver);
+            contractorProfilePage.ClearAllProfileFields();
 
-            //clear input fields
-            contractorProfilePage.AddressField().Clear();
-            contractorProfilePage.BankNameField().Clear();
-            contractorProfilePage.AccountNumberField().Clear();
-            contractorProfilePage.AgencyNameField().Clear();
-            contractorProfilePage.RegistryNumberForCountry().Clear();
-            contractorProfilePage.TaxIdentificationNumber().Clear();
-            contractorProfilePage.TelephoneField().Clear();
-
-            //enter data in input fields
-            contractorProfilePage.AddressField().SendKeys(invalidAddress);
-            contractorProfilePage.BankNameField().SendKeys(invalidBankName);
-            contractorProfilePage.AccountNumberField().SendKeys(invalidAccNumber);
-            contractorProfilePage.AgencyNameField().SendKeys(invalidAgencyName);
-            contractorProfilePage.RegistryNumberForCountry().SendKeys(invalidRegistryNumber);
-            contractorProfilePage.TaxIdentificationNumber().SendKeys(invalidTaxNumber);
-            contractorProfilePage.TelephoneField().SendKeys(invalidTelNumber);
+            contractorProfilePage.FillAllProfileFields(invalidAddress, invalidBankName, invalidAccNumber, 
+                invalidAgencyName, invalidRegistryNumber, invalidTaxNumber, invalidTelNumber);
 
         }
         
         [When(@"clicks button Save")]
         public void WhenClicksButtonSave()
         {
-            ContractorProfilePage contractorProfilePage = new ContractorProfilePage(Driver);
             contractorProfilePage.SaveButton().Click();
         }
 
         [Then(@"Error messages are displayed on page")]
         public void ThenErrorMessagesAreDisplayedOnPage()
         {
-            ContractorProfilePage contractorProfilePage = new ContractorProfilePage(Driver);
-            ContractorHomePage contractorHomePage = new ContractorHomePage(Driver);
-
             //loop for error messages depending on local language
-            if (contractorHomePage.LanguageDropDown().Text.Contains("EN"))
+            if (homePage.LanguageDropDown().Text.Contains("EN"))
             {
                 Assert.AreEqual("Address must be alphanumeric.", contractorProfilePage.AddressErrorMessage().Text);
                 Assert.AreEqual("Bank name must be alphanumeric.", contractorProfilePage.BankNameErrorMessage().Text);
